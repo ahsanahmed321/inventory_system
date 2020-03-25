@@ -26,7 +26,6 @@ router.post("/add", (req, res) => {
   if (!isValid) {
     res.status(400).json(errors);
   } else {
-    console.log("check");
     const payment = Payment(req.body);
     payment
       .save()
@@ -74,13 +73,11 @@ router.post("/add", (req, res) => {
         transaction
           .save()
           .then(transactionHistory => res.json(transactionHistory))
-          .catch(errorrr => res.json(errorrr));
+          .catch(errorr => res.json(errorr));
       })
       .catch(error => res.json(error));
   }
 });
-
-module.exports = router;
 
 // Search Payment
 //api/payment/search
@@ -100,3 +97,52 @@ router.get("/search", (req, res) => {
     .then(result => res.json(result))
     .catch(error => res.json(error));
 });
+
+//Delete Payment
+router.delete("/delete", (req, res) => {
+  Payment.findOneAndDelete({ _id: req.body.id })
+    .then(result => {
+      Transaction.findOneAndDelete({
+        payment_id: req.body.id
+      })
+        .then(transactionHistory => res.json(transactionHistory))
+        .catch(errorr => res.json(errorr));
+    })
+    .catch(error => res.json(error));
+});
+
+//Delete Product
+router.patch("/deleteproduct", (req, res) => {
+  Payment.findOneAndUpdate(
+    { _id: req.body.id, "product._id": req.body.product },
+    { $pull: { product: { _id: req.body.product } } }
+  )
+    .then(result => res.json(result))
+    .catch(error => res.json(error));
+});
+
+//Update Product
+router.patch("/updateproduct", (req, res) => {
+  const updatedProduct = req.body.newProduct;
+  Payment.findOne({ _id: req.body.id, "product._id": req.body.product })
+    .then(result => {
+      if (result) {
+        Payment.findOneAndUpdate(
+          { _id: req.body.id, "product._id": req.body.product },
+          { $set: { "product.$": updatedProduct } },
+          { new: true }
+        )
+          .then(abc => res.json(abc))
+          .catch(xyz => res.json(xyz));
+      } else {
+        result.product.unshift(updatedProduct);
+        result
+          .save()
+          .then(resultt => res.json(resultt))
+          .catch(errorr => res.json(errorr));
+      }
+    })
+    .catch(error => res.json(error));
+});
+
+module.exports = router;
