@@ -26,9 +26,27 @@ router.post("/add", (req, res) => {
   if (!isValid) {
     res.status(400).json(errors);
   } else {
-    const payment = req.body;
-    res.json(payment);
+    const payment = Payment(req.body);
+    payment
+      .save()
+      .then(result => res.json(result))
+      .catch(error => res.json(error));
   }
 });
 
 module.exports = router;
+
+// Search Payment
+//api/payment/search
+
+router.get("/search", (req, res) => {
+  console.log(req.query);
+  const Query = {};
+  if (req.query.name) Query["customer.customer_name"] = req.query.name;
+  if (req.query.contact_no) Query["customer.contact_no"] = req.query.contact;
+  if (req.query.city) Query["customer.city"] = req.query.city;
+
+  Payment.find(Query)
+    .then(result => res.json(result))
+    .catch(error => res.json(error));
+});
