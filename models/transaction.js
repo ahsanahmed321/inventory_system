@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const TransactionSchema = new Schema({
   payment_id: { type: mongoose.Types.ObjectId, ref: "payment" },
+  total_amount: { type: Number, required: true },
   paid_amount: { type: Number, required: true },
   credit: { type: Number, required: true },
   profit: { type: Number, required: true },

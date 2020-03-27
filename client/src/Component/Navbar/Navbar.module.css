@@ -1,0 +1,20 @@
+.Navbar {
+  background: rgb(53, 53, 53);
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.NavbarImage {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+.NavbarItems {
+  margin-left: auto;
+  color: white !important;
+}
+
+.NavbarItem {
+  margin-left: 32px;
+}

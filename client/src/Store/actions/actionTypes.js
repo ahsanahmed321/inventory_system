@@ -1,0 +1,9 @@
+export const ADD_TO_CART = "ADD_TO_CART";
+export const DELETE_FROM_CART = "DELETE_FROM_CART";
+export const GET_ERRORS = "GET_ERRORS";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const GET_MY_SCHOOL = "GET_MY_SCHOOL";
+export const MY_SCHOOL_LOADING = "MY_SCHOOL_LOADING";
+export const MY_SCHOOL_NOT_FOUND = "MY_SCHOOL_NOT_FOUND";
+export const CLEAR_MY_SCHOOL = "CLEAR_MY_SCHOOL";
+export const GET_ALL_SCHOOL = "GET_ALL_SCHOOL";

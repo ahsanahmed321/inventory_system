@@ -3,6 +3,9 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
+//Custom Imports
+const transactionPipe = require("../../utils/TransactionPipe");
+
 // Import Validator
 const validatePaymentInput = require("../../validation/add-payment");
 
@@ -30,47 +33,11 @@ router.post("/add", (req, res) => {
     payment
       .save()
       .then(result => {
-        //calculating Total Amount
+        const transaction = transactionPipe(result);
 
-        totalAmount = 0;
-        result.product.forEach(element => {
-          totalAmount = totalAmount + element.sell_price;
-        });
+        const transactionInstance = Transaction(transaction);
 
-        //Calculating Paid Amount
-        paidAmount = 0;
-        result.product.forEach(element => {
-          if (element.payment === "paying") {
-            paidAmount = paidAmount + element.sell_price;
-          }
-        });
-
-        //calculating Due Amount
-        dueAmount = totalAmount - paidAmount;
-
-        //Calculating Credit Amount
-        creditAmount = 0;
-        result.product.forEach(element => {
-          if (element.ownership === "credit") {
-            creditAmount = creditAmount + element.cost_price;
-          }
-        });
-
-        //Calculating Profits
-        Profit = 0;
-        result.product.forEach(element => {
-          Profit = Profit + (element.sell_price - element.cost_price);
-        });
-
-        const transaction = Transaction({
-          payment_id: result._id,
-          paid_amount: paidAmount,
-          due_amount: dueAmount,
-          credit: creditAmount,
-          profit: Profit
-        });
-
-        transaction
+        transactionInstance
           .save()
           .then(transactionHistory => res.json(transactionHistory))
           .catch(errorr => res.json(errorr));
@@ -113,11 +80,25 @@ router.delete("/delete", (req, res) => {
 
 //Delete Product
 router.patch("/deleteproduct", (req, res) => {
+  console.log("Ahsan");
   Payment.findOneAndUpdate(
     { _id: req.body.id, "product._id": req.body.product },
-    { $pull: { product: { _id: req.body.product } } }
+    { $pull: { product: { _id: req.body.product } } },
+    { new: true }
   )
-    .then(result => res.json(result))
+    .then(result => {
+      console.log("bye");
+      const transaction = transactionPipe(result);
+      console.log("Hi there");
+      console.log(transaction);
+      Transaction.findOneAndUpdate(
+        { payment_id: result._id },
+        { $set: transaction },
+        { new: true }
+      )
+        .then(trans => res.json(trans))
+        .catch(err => res.json(err));
+    })
     .catch(error => res.json(error));
 });
 
@@ -132,13 +113,35 @@ router.patch("/updateproduct", (req, res) => {
           { $set: { "product.$": updatedProduct } },
           { new: true }
         )
-          .then(abc => res.json(abc))
+          .then(abc => {
+            const transaction = transactionPipe(abc);
+            Transaction.findOneAndUpdate(
+              { payment_id: result._id },
+              { $set: transaction },
+              { new: true }
+            )
+              .then(trans => res.json(trans))
+              .catch(err => res.json(err));
+          })
           .catch(xyz => res.json(xyz));
       } else {
-        result.product.unshift(updatedProduct);
-        result
-          .save()
-          .then(resultt => res.json(resultt))
+        Payment.findOne({ _id: req.body.id })
+          .then(resultt => {
+            resultt.product.unshift(updatedProduct);
+            resultt
+              .save()
+              .then(abc => {
+                const transaction = transactionPipe(abc);
+                Transaction.findOneAndUpdate(
+                  { payment_id: result._id },
+                  { $set: transaction },
+                  { new: true }
+                )
+                  .then(trans => res.json(trans))
+                  .catch(err => res.json(err));
+              })
+              .catch(err => res.json(err));
+          })
           .catch(errorr => res.json(errorr));
       }
     })
