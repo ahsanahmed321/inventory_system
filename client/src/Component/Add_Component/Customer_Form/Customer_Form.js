@@ -1,25 +1,44 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-export default function Customer_Form() {
+export default function Customer_Form(props) {
   return (
     <Form>
-      <h3>Add Payment</h3>
-      <Form.Group controlId="formBasicEmail">
+      <Form.Group>
         <Form.Label>Name</Form.Label>
-        <Form.Control type="text" placeholder="Customer Name..." />
+        <Form.Control
+          onChange={props.changed}
+          type="text"
+          id="customer_name"
+          placeholder="Customer Name..."
+        />
       </Form.Group>
-      <Form.Group controlId="formBasicEmail">
+      <Form.Group>
         <Form.Label>Contact</Form.Label>
-        <Form.Control type="number" placeholder="Contact Number..." />
+        <Form.Control
+          onChange={props.changed}
+          type="number"
+          id="contact_no"
+          placeholder="Contact Number..."
+        />
       </Form.Group>
-      <Form.Group controlId="formBasicEmail">
+      <Form.Group>
         <Form.Label>City</Form.Label>
-        <Form.Control type="text" placeholder="City..." />
+        <Form.Control
+          onChange={props.changed}
+          type="text"
+          id="address"
+          placeholder="City..."
+        />
       </Form.Group>
-      <Form.Group controlId="formBasicEmail">
+      <Form.Group>
         <Form.Label>Address</Form.Label>
-        <Form.Control type="text" placeholder="Address..." />
+        <Form.Control
+          onChange={props.changed}
+          type="text"
+          id="city"
+          placeholder="Address..."
+        />
       </Form.Group>
     </Form>
   );

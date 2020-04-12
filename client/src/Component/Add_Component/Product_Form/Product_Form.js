@@ -22,10 +22,17 @@ const formItemLayoutWithOutLabel = {
   }
 };
 
-const DynamicFieldSet = () => {
+const DynamicFieldSet = props => {
   const onFinish = values => {
     console.log("Received values of form:", values);
   };
+
+  var productId = "product_id@";
+  var productName = "product_name@";
+  var costPrice = "cost_price@";
+  var sellPrice = "sell_price@";
+  var payment = "payment@";
+  var ownership = "ownership@";
 
   return (
     <Form
@@ -41,7 +48,7 @@ const DynamicFieldSet = () => {
               {fields.map((field, index) => (
                 <ExpansionPanel
                   summary={index}
-                  field={
+                  fielda={
                     <div className="mx-auto">
                       <Form.Item
                         {...(index === 0 ? formItemLayout : formItemLayout)}
@@ -61,19 +68,42 @@ const DynamicFieldSet = () => {
                           ]}
                           noStyle
                         >
-                          <Input
-                            placeholder="Product Id..."
-                            style={{ width: "60%", marginRight: 8 }}
-                          />
+                          <p>Insert Product {index + 1} Details Here</p>
                         </Form.Item>
                         {fields.length > 1 ? (
                           <MinusCircleOutlined
                             className="dynamic-delete-button"
                             onClick={() => {
+                              props.clicked(index + 1);
+                              console.log(field);
                               remove(field.name);
                             }}
                           />
                         ) : null}
+                      </Form.Item>
+                      <Form.Item
+                        {...(index === 0 ? formItemLayout : formItemLayout)}
+                        label="Product Id"
+                        required={false}
+                      >
+                        <Form.Item
+                          validateTrigger={["onChange", "onBlur"]}
+                          rules={[
+                            {
+                              required: true,
+                              whitespace: true,
+                              message: "Please input Product's Id."
+                            }
+                          ]}
+                          noStyle
+                        >
+                          <Input
+                            onChange={props.changed}
+                            id={productId + index}
+                            placeholder="Product id..."
+                            style={{ width: "60%", marginRight: 8 }}
+                          ></Input>
+                        </Form.Item>
                       </Form.Item>
                       <Form.Item
                         {...(index === 0 ? formItemLayout : formItemLayout)}
@@ -92,6 +122,8 @@ const DynamicFieldSet = () => {
                           noStyle
                         >
                           <Input
+                            onChange={props.changed}
+                            id={productName + index}
                             placeholder="Product name..."
                             style={{ width: "60%", marginRight: 8 }}
                           ></Input>
@@ -114,6 +146,8 @@ const DynamicFieldSet = () => {
                           noStyle
                         >
                           <Input
+                            onChange={props.changed}
+                            id={costPrice + index}
                             placeholder="Cost Price..."
                             style={{ width: "60%", marginRight: 8 }}
                           ></Input>
@@ -136,6 +170,8 @@ const DynamicFieldSet = () => {
                           noStyle
                         >
                           <Input
+                            onChange={props.changed}
+                            id={sellPrice + index}
                             placeholder="Sell Price..."
                             style={{ width: "60%", marginRight: 8 }}
                           ></Input>
@@ -159,6 +195,8 @@ const DynamicFieldSet = () => {
                           noStyle
                         >
                           <Select
+                            onChange={props.changed}
+                            id={payment + index}
                             placeholder="Payment Type..."
                             style={{ width: "30%" }}
                           >
@@ -186,6 +224,8 @@ const DynamicFieldSet = () => {
                           noStyle
                         >
                           <Select
+                            onChange={props.changed}
+                            id={ownership + index}
                             placeholder="ownership..."
                             style={{ width: "30%" }}
                           >

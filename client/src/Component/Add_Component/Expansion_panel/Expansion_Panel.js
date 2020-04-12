@@ -31,7 +31,7 @@ export default function SimpleExpansionPanel(props) {
             Product {props.summary + 1}
           </Typography>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails>{props.field}</ExpansionPanelDetails>
+        <ExpansionPanelDetails>{props.fielda}</ExpansionPanelDetails>
       </ExpansionPanel>
     </div>
   );
