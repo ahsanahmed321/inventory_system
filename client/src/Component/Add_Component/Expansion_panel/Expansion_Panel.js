@@ -21,6 +21,9 @@ export default function SimpleExpansionPanel(props) {
 
   return (
     <div className={classes.root}>
+      <div style={{ margin: "24px", textAlign: "center" }}>
+        {props.minusButton}
+      </div>
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -31,6 +34,7 @@ export default function SimpleExpansionPanel(props) {
             Product {props.summary + 1}
           </Typography>
         </ExpansionPanelSummary>
+
         <ExpansionPanelDetails>{props.fielda}</ExpansionPanelDetails>
       </ExpansionPanel>
     </div>

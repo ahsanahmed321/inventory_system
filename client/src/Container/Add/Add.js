@@ -101,7 +101,7 @@ export default class Container2 extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ textAlign: "center" }}>
         <h2>Add Payment</h2>
         <p>Date</p>
         <input onChange={this.dateChangeHandler} type="date"></input>
