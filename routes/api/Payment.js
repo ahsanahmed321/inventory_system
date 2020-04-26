@@ -36,7 +36,7 @@ router.post("/add", (req, res) => {
         const transaction = transactionPipe(result);
 
         const transactionInstance = Transaction(transaction);
-
+        transactionInstance.Withdraw = false;
         transactionInstance
           .save()
           .then(transactionHistory => res.json(transactionHistory))

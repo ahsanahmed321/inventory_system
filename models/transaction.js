@@ -7,7 +7,8 @@ const TransactionSchema = new Schema({
   paid_amount: { type: Number, required: true },
   credit: { type: Number, required: true },
   profit: { type: Number, required: true },
-  due_amount: { type: Number, required: true }
+  due_amount: { type: Number, required: true },
+  Withdraw: { type: Boolean, required: true }
 });
 
 module.exports = Transaction = mongoose.model("transaction", TransactionSchema);
