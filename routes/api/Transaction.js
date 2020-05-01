@@ -48,6 +48,7 @@ router.get("/non_withdraw_Unclear", (req, res) => {
     });
 });
 
+// withdraw amount with clear debit and credit
 router.post("/withdraw", (req, res) => {
   Transaction.updateMany(
     { Withdraw: false, credit: 0, due_amount: 0 },
@@ -55,6 +56,69 @@ router.post("/withdraw", (req, res) => {
   )
     .then(result => res.json(result))
     .catch(error => console.log(error));
+});
+
+//filter with credit and debit
+router.get("/filter", (req, res) => {
+  if (req.query.credit === "true" && req.query.due_amount === "false") {
+    const Payment_Ids = [];
+    Transaction.find({ credit: { $gt: 0 } })
+      .then(result => {
+        result.forEach(element => {
+          Payment_Ids.push(element.payment_id);
+        });
+
+        Payment.find({ _id: { $in: Payment_Ids } })
+          .then(realResult => {
+            res.json(realResult);
+          })
+          .catch(realError => {
+            console.log(realError);
+          });
+      })
+
+      .catch(error => console.log(error));
+  }
+
+  if (req.query.credit === "false" && req.query.due_amount === "true") {
+    const Payment_Ids = [];
+    Transaction.find({ due_amount: { $gt: 0 } })
+      .then(result => {
+        result.forEach(element => {
+          Payment_Ids.push(element.payment_id);
+        });
+
+        Payment.find({ _id: { $in: Payment_Ids } })
+          .then(realResult => {
+            res.json(realResult);
+          })
+          .catch(realError => {
+            console.log(realError);
+          });
+      })
+
+      .catch(error => console.log(error));
+  }
+
+  if (req.query.credit === "true" && req.query.due_amount === "true") {
+    const Payment_Ids = [];
+    Transaction.find({ credit: { $gt: 0 }, due_amount: { $gt: 0 } })
+      .then(result => {
+        result.forEach(element => {
+          Payment_Ids.push(element.payment_id);
+        });
+
+        Payment.find({ _id: { $in: Payment_Ids } })
+          .then(realResult => {
+            res.json(realResult);
+          })
+          .catch(realError => {
+            console.log(realError);
+          });
+      })
+
+      .catch(error => console.log(error));
+  }
 });
 
 module.exports = router;

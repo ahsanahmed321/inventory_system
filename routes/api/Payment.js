@@ -59,7 +59,6 @@ router.get("/search", (req, res) => {
   if (req.query.product_name)
     Query["product.product_name"] = req.query.product_name;
   if (req.query.product_id) Query["product.product_id"] = req.query.product_id;
-
   Payment.find(Query)
     .then(result => res.json(result))
     .catch(error => res.json(error));
